@@ -13,3 +13,8 @@ ATestProjectGameMode::ATestProjectGameMode()
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
 }
+
+void ATestProjectGameMode::AddScore(int Points)
+{
+	ScoreTotal += Points;
+}

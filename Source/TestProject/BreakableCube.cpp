@@ -37,6 +37,7 @@ void ABreakableCube::OnConstruction(const FTransform& Transform)
 void ABreakableCube::BeginPlay()
 {
 	Super::BeginPlay();
+	SetGM();
 	SetDeltaSeconds();
 	isPreview = false;
 	//UE_LOG(LogTemp, Warning, TEXT("Breakable Cube Begin Play"));
@@ -66,8 +67,14 @@ void ABreakableCube::BeginPlay()
 
 void ABreakableCube::SetDeltaSeconds()
 {	
-	DeltaSeconds = 0.0166666666666667;
+	DeltaSeconds = 0.0333;
+	//DeltaSeconds = 0.0166666666666667;
 
+}
+
+void ABreakableCube::SetGM()
+{
+	GM = Cast<ATestProjectGameMode>(GetWorld()->GetAuthGameMode());
 }
 
 void ABreakableCube::InitializeSettings(int Row, int Column, int Depth, float Increment)
@@ -262,11 +269,11 @@ void ABreakableCube::InstanceDirectMove()
 	if (!ISM) { return; }	
 	for (int i : InstancedPhysicsObjectsMoveMap_KeyList)
 	{	
-		ISM->UpdateInstanceTransform(i, InstanceTransform, true, false);
-
+		ISM->UpdateInstanceTransform(i, InstanceTransform, true, false);		
 		LastInstanceIndex = i;
 		//Items are not removed from instancing due to negative effects on restructuring the Instance List -> Instead they are moved far off screen where they will not affect running threads.		
 		InstancedPhysicsObjectsMoveMap.Remove(i);
+		SetGMScore();
 	}
 	if (InstancedPhysicsObjectsMoveMap_KeyList.Num() > 0)
 	{
@@ -304,7 +311,8 @@ void ABreakableCube::ReplaceBreakablesWithSelf()
 				//Create Instance on Self to replace Transform of selected breakable.
 				ISM->AddInstance(InstanceTransform, true);
 				//Adding to this map will auto destroy the instance for the Selected Breakable.
-				SelectedBreakable->InstancedPhysicsObjectsMoveMap.Add(RandomInstanceInt, 0);
+				SelectedBreakable->AddInstancedPhysicsObject(RandomInstanceInt);
+				//SelectedBreakable->InstancedPhysicsObjectsMoveMap.Add(RandomInstanceInt, 0); //Replaced with AddInstancedPhysicsObject
 			}
 			//Breakable is higher priority or not replaceable, remove from list and decrement loop.
 			else
@@ -357,4 +365,12 @@ void ABreakableCube::TraceCheckBlocksLoaded()
 bool ABreakableCube::GetLoadValue()
 {
 	return isFinishedLoading;
+}
+
+void ABreakableCube::SetGMScore()
+{
+	if (GM && GM->isGameStarted)
+	{
+		GM->AddScore(PointsValue);
+	}
 }

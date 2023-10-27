@@ -7,7 +7,10 @@
 #include "Kismet/KismetMathLibrary.h" 
 #include "Components/InstancedStaticMeshComponent.h"
 #include "Components/HierarchicalInstancedStaticMeshComponent.h"
+#include "TestProjectGameMode.h"
 #include "BreakableCube.generated.h"
+
+class ATestProjectGameMode;
 
 UCLASS()
 class TESTPROJECT_API ABreakableCube : public AActor
@@ -136,6 +139,15 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Setup)
 	bool isBreakable = true;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Setup)
+	int PointsValue = 0;
+
+	TObjectPtr<ATestProjectGameMode> GM = nullptr;
+
+	void SetGM();
+
+	void SetGMScore();
 private:
 	bool isFinishedLoading = false;
 };
