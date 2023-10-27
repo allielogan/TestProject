@@ -1,0 +1,17 @@
+Binaries
+Content
+Content - Copy
+Saved
+Intermediate
+DerivedDataCache
+Platforms
+Config
+.vs
+
+
+.vs/TestProject/v16/.suo
+*.db
+*.ipch
+*.dll
+*.exe
+*.uasset
