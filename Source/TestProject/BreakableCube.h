@@ -58,9 +58,10 @@ public:
 	FVector MeshScale = FVector(0.1, 0.1, 0.1);
 
 	FVector SavedMeshScale;
-
+	
+	//M
 	int InitCtrMax = 0;
-
+	//M
 	void GenerateTransformList();
 
 	TArray<FVector> InitializerTransformList;
